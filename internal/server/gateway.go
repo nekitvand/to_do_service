@@ -23,6 +23,10 @@ func GoGatewayRpcRun() error {
 	if err != nil {
 		panic(err)
 	}
+	gwServer := &http.Server{
+		Addr:    gatewayGrpcHostPort,
+		Handler: mux,
+	}
 
-	return http.ListenAndServe(gatewayGrpcHostPort, mux)
+	return gwServer.ListenAndServe()
 }

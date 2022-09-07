@@ -5,17 +5,17 @@ import "context"
 
 var todoes = ToDos{
 	{
-		Id: 1,
+		Id: uint64(1),
 		Name: "new1",
 		Text: "zadvcx",
 	},
 	{
-		Id: 2,
+		Id: uint64(2),
 		Name: "new2",
 		Text: "cadvcx",
 	},
 	{
-		Id: 3,
+		Id: uint64(3),
 		Name: "new3",
 		Text: "badvcx",
 	},

@@ -20,13 +20,13 @@ func NewService(repository RepositoryInterface) Service {
 
 var ErrNoToDo = errors.New("no todo")
 
-func (s Service) GetToDoById(ctx context.Context, id int32,name string,text string)(*ToDo,error) {
+func (s Service) GetToDoById(ctx context.Context, id uint64)(*ToDo,error) {
 	todo, err := s.repository.FindAllToDoes(ctx)
 	if err != nil {
 		return nil, errors.Wrap(err,"repository.FindAllToDoes")
 	}
 
-	to := todo.FilterById(int64(id))
+	to := todo.FilterById(id)
 	if to == nil{
 		return nil,ErrNoToDo
 	}
