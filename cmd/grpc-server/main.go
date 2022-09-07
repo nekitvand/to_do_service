@@ -3,23 +3,28 @@ package main
 import (
 	"context"
 	"fmt"
-	"github/nekitvand/to_do_service/internal/server"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/nekitvand/to_do_service/internal/server"
+	todo_service "github.com/nekitvand/to_do_service/internal/service"
 )
 
 func main() {
 
+	todoRepository := todo_service.NewRepository()
+	todoService := todo_service.NewService(todoRepository)
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	
+
 	go func ()  {
 		server.GoGatewayRpcRun()
 	}()
 
 	go func() {
-		gserv := server.NewGrpcServer()
+		gserv := server.NewGrpcServer(todoService,)
 		gserv.GoRpcRun()
 	}()
 

@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"net"
-	service "github/nekitvand/to_do_service/pkg/to_do_service"
+	service "github.com/nekitvand/to_do_service/pkg/to_do_service"
+	todo_service "github.com/nekitvand/to_do_service/internal/service"
+	api "github.com/nekitvand/to_do_service/internal/app/to_do_service"
 
 )
 
@@ -14,10 +16,11 @@ const grpcHostPort = "0.0.0.0:8082"
 
 
 type GrpcServer struct {
+	todoService todo_service.Service
 }
 
-func NewGrpcServer() *GrpcServer {
-	return &GrpcServer{}
+func NewGrpcServer(todoService todo_service.Service) *GrpcServer {
+	return &GrpcServer{todoService:todoService}
 	}
 
 
@@ -34,6 +37,6 @@ func (s *GrpcServer) GoRpcRun() error{
 			fmt.Println("Failed to close")
 	}}()
 		
-	service.RegisterToDoServiceServer(grpcServer,nil)
+	service.RegisterToDoServiceServer(grpcServer,api.NewUsersService(s.todoService))
 	return grpcServer.Serve(listen)
 }

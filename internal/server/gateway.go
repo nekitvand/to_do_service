@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
-	service "github/nekitvand/to_do_service/pkg/to_do_service"
+	service "github.com/nekitvand/to_do_service/pkg/to_do_service"
 )
 
 const (
