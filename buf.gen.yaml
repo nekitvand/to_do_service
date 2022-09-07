@@ -1,0 +1,21 @@
+ version: v1
+ plugins:
+  - name: go
+    out: pkg
+    opt:
+      - module=github.com/nekitvand/to_do_service
+  - name: go-grpc
+    out: pkg
+    opt:
+      - module=github.com/nekitvand/to_do_service
+  - name: grpc-gateway
+    out: pkg
+    opt:
+      - generate_unbound_methods=true
+      - module=github.com/nekitvand/to_do_service
+  - name: openapiv2
+    path: protoc-gen-openapiv2
+    out: swagger
+    opt:
+      - generate_unbound_methods=true
+    strategy: directory
