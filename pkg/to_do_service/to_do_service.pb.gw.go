@@ -99,7 +99,7 @@ func request_ToDoService_GetToDoById_0(ctx context.Context, marshaler runtime.Ma
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -125,7 +125,7 @@ func local_request_ToDoService_GetToDoById_0(ctx context.Context, marshaler runt
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -159,7 +159,7 @@ func request_ToDoService_UpdateFieldToDo_0(ctx context.Context, marshaler runtim
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -193,7 +193,7 @@ func local_request_ToDoService_UpdateFieldToDo_0(ctx context.Context, marshaler 
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -227,7 +227,7 @@ func request_ToDoService_UpdateToDo_0(ctx context.Context, marshaler runtime.Mar
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -261,7 +261,7 @@ func local_request_ToDoService_UpdateToDo_0(ctx context.Context, marshaler runti
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -287,7 +287,7 @@ func request_ToDoService_DeleteToDo_0(ctx context.Context, marshaler runtime.Mar
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -313,7 +313,7 @@ func local_request_ToDoService_DeleteToDo_0(ctx context.Context, marshaler runti
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.Id, err = runtime.Int32(val)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
 	}
@@ -354,7 +354,7 @@ func RegisterToDoServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_ToDoService_GetAllToDo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ToDoService_GetAllToDo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -542,7 +542,7 @@ func RegisterToDoServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 
 	})
 
-	mux.Handle("GET", pattern_ToDoService_GetAllToDo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ToDoService_GetAllToDo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)

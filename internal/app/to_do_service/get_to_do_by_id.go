@@ -20,7 +20,7 @@ func (i *Implementation) GetToDoById(ctx context.Context, req *proto_to_do_servi
 func makeGetToDoById(to_do *todo.ToDo) *proto_to_do_service.GetToDoByIdResponse {
 
 	pbToDo := &proto_to_do_service.ToDo{
-		Id:   uint64(to_do.Id),
+		Id:   to_do.Id,
 		Name: to_do.Name,
 		Text: to_do.Text,
 	}

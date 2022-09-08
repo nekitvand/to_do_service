@@ -28,6 +28,14 @@ func main() {
 		gserv.GoRpcRun()
 	}()
 
+	go func() {
+		swagger,err := server.CreateSwaggerServer("localhost:8080","localhost:6001","../../swagger/api/to_do_service/to_do_service.swagger.json")
+		if err != nil{
+			fmt.Println(err)
+		}
+		swagger.ListenAndServe()
+	}()
+
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 

@@ -49,7 +49,7 @@
       }
     },
     "/v1/get_all": {
-      "get": {
+      "post": {
         "operationId": "ToDoService_GetAllToDo",
         "responses": {
           "200": {
@@ -92,8 +92,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "format": "uint64"
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -123,8 +123,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "format": "uint64"
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -152,8 +152,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "format": "uint64"
+            "type": "integer",
+            "format": "int32"
           },
           {
             "name": "body",
@@ -199,8 +199,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "format": "uint64"
+            "type": "integer",
+            "format": "int32"
           },
           {
             "name": "body",
@@ -300,8 +300,8 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "uint64"
+          "type": "integer",
+          "format": "int32"
         },
         "name": {
           "type": "string"
