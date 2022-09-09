@@ -2,30 +2,31 @@ package server
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	cfg "github.com/nekitvand/to_do_service/internal/config"
 	service "github.com/nekitvand/to_do_service/pkg/to_do_service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	gatewayGrpcHostPort = "localhost:8080"
-)
+func GoGatewayRpcRun(cfg *cfg.Config) error {
 
-func GoGatewayRpcRun() error {
+	GrcAddr := fmt.Sprintf("%s:%v",cfg.Grpc.Host,cfg.Grpc.Port)
+	GatewayAddr := fmt.Sprintf("%s:%v",cfg.Gateway.Host,cfg.Gateway.Port)
 
 	mux := runtime.NewServeMux()
 
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	err := service.RegisterToDoServiceHandlerFromEndpoint(context.Background(), mux, grpcHostPort, opts)
+	err := service.RegisterToDoServiceHandlerFromEndpoint(context.Background(), mux, GrcAddr, opts)
 	if err != nil {
 		panic(err)
 	}
 	gwServer := &http.Server{
-		Addr:    gatewayGrpcHostPort,
+		Addr:    GatewayAddr,
 		Handler: cors(mux),
 	}
 

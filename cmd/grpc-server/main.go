@@ -8,10 +8,15 @@ import (
 	"syscall"
 
 	"github.com/nekitvand/to_do_service/internal/server"
+	"github.com/nekitvand/to_do_service/internal/config"
 	todo_service "github.com/nekitvand/to_do_service/internal/service"
 )
 
 func main() {
+
+	config.ReadConfigYaml("../../config.yaml")
+	cfg := config.GetConfig()
+	
 
 	todoRepository := todo_service.NewRepository()
 	todoService := todo_service.NewService(todoRepository)
@@ -20,16 +25,16 @@ func main() {
 	defer cancel()
 
 	go func ()  {
-		server.GoGatewayRpcRun()
+		server.GoGatewayRpcRun(&cfg)
 	}()
 
 	go func() {
 		gserv := server.NewGrpcServer(todoService,)
-		gserv.GoRpcRun()
+		gserv.GoRpcRun(&cfg)
 	}()
 
 	go func() {
-		swagger,err := server.CreateSwaggerServer("localhost:8080","localhost:6001","../../swagger/api/to_do_service/to_do_service.swagger.json")
+		swagger,err := server.CreateSwaggerServer(&cfg)
 		if err != nil{
 			fmt.Println(err)
 		}
