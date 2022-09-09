@@ -7,12 +7,13 @@ import (
 	// "net/http"
 
 	api "github.com/nekitvand/to_do_service/internal/app/to_do_service"
+	"github.com/nekitvand/to_do_service/internal/config"
 	todo_service "github.com/nekitvand/to_do_service/internal/service"
 	service "github.com/nekitvand/to_do_service/pkg/to_do_service"
 	"google.golang.org/grpc"
 )
 
-const grpcHostPort = "localhost:8082"
+
 
 type GrpcServer struct {
 	todoService todo_service.Service
@@ -22,10 +23,11 @@ func NewGrpcServer(todoService todo_service.Service) *GrpcServer {
 	return &GrpcServer{todoService: todoService}
 }
 
-func (s *GrpcServer) GoRpcRun() error {
+func (s *GrpcServer) GoRpcRun(cfg *config.Config) error {
+	GrcAddr := fmt.Sprintf("%s:%v",cfg.Grpc.Host,cfg.Grpc.Port)
 	grpcServer := grpc.NewServer()
 	defer grpcServer.GracefulStop()
-	listen, err := net.Listen("tcp", grpcHostPort)
+	listen, err := net.Listen("tcp",GrcAddr)
 	if err != nil {
 		return err
 	}

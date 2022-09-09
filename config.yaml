@@ -1,6 +1,13 @@
+grpc:
+  host: 0.0.0.0
+  port: 6000
+
+gateway:
+  host: 0.0.0.0
+  port: 6002
+
 swagger:
   host: 0.0.0.0
   port: 6001
-  filepath: "swagger/api/to_do/product-service.swagger.json"
-
-categoryServiceAddr: "localhost:6002"
+  dist: "../../swagger/dist"
+  filepath: "../../swagger/api/to_do_service/to_do_service.swagger.json"

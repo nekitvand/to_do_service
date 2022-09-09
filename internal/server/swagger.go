@@ -6,15 +6,21 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"github.com/nekitvand/to_do_service/internal/config"
 )
 
-func CreateSwaggerServer(gatewayAddr, swaggerAddr, swaggerPath string) (*http.Server, error) {
-	originalSwagger, err := os.ReadFile(swaggerPath)
+func CreateSwaggerServer(cfg *config.Config) (*http.Server, error) {
+
+	// GrcAddr := fmt.Sprintf("%s:%v",cfg.Grpc.Host,cfg.Grpc.Port)
+	SwagAddr := fmt.Sprintf("%s:%v",cfg.Swagger.Host,cfg.Swagger.Port)
+	GatewayAddr := fmt.Sprintf("%s:%v",cfg.Gateway.Host,cfg.Gateway.Port)
+
+	originalSwagger, err := os.ReadFile(cfg.Swagger.Filepath)
 	if err != nil {
 		return nil, fmt.Errorf("missing swagger.json: %w", err)
 	}
 
-	patchedSwagger, err := injectHost(originalSwagger, gatewayAddr)
+	patchedSwagger, err := injectHost(originalSwagger, GatewayAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -35,7 +41,7 @@ func CreateSwaggerServer(gatewayAddr, swaggerAddr, swaggerPath string) (*http.Se
 		w.Write(patchedSwagger)
 	}))
 
-	docsServer := http.FileServer(http.Dir("../../swagger/dist"))
+	docsServer := http.FileServer(http.Dir(cfg.Swagger.Dist))
 
 	serveMux.Handle("/docs/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/docs" || strings.HasPrefix(r.URL.Path, "/docs/") {
@@ -50,7 +56,7 @@ func CreateSwaggerServer(gatewayAddr, swaggerAddr, swaggerPath string) (*http.Se
 	}))
 
 	gatewayServer := &http.Server{
-		Addr:    swaggerAddr,
+		Addr:    SwagAddr,
 		Handler: serveMux,
 	}
 
