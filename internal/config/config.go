@@ -2,7 +2,7 @@ package config
 
 import (
 	"os"
-
+	"time"
 	"gopkg.in/yaml.v3"
 )
 
@@ -43,6 +43,36 @@ type Config struct {
 	Gateway Gateway `yaml:"gateway"`
 	Swagger Swagger `yaml:"swagger"`
 	ToDoService string `yaml:"to_do_service"`
+	DB DB `yaml:"db"`
+}
+
+
+type DB struct {
+	DSN        string `yaml:"DSN"`
+	MaxOpenConns int `yaml:"maxOpenConns"`
+	MaxIdleConns int `yaml:"MaxIdleConns"`
+	ConnMaxIdleTime time.Duration `yaml:"connMaxIdleTime"`
+	ConnMaxLifetime time.Duration `yaml:"connMaxLifetime"`
+}
+
+func (db *DB) GetDSN() string {
+	return db.DSN
+}
+
+func (db *DB) GetMaxOpenConns() int {
+	return db.MaxOpenConns
+}
+
+func (db *DB) GetMaxIdleConns() int {
+	return db.MaxIdleConns
+}
+
+func (db *DB) GetConnMaxIdleTime() time.Duration {
+	return db.ConnMaxIdleTime
+}
+
+func (db *DB) GetConnMaxLifetime() time.Duration {
+	return db.ConnMaxLifetime
 }
 
 func ReadConfigYaml(configYaml string) error {

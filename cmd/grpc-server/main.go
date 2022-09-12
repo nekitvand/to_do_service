@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	config.ReadConfigYaml("../../config.yaml")
+	config.ReadConfigYaml("config.yaml")
 	cfg := config.GetConfig()
 	
 

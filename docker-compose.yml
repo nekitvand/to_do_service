@@ -1,0 +1,18 @@
+version: "3.3"
+
+services:
+  to_do_service:
+    build: .
+    ports:
+    - 6000:6000
+    - 6001:6001
+    - 6002:6002
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=user 
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./postgres-data:/var/lib/postgresql/data
