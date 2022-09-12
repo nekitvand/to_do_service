@@ -10,6 +10,10 @@ import (
 	"github.com/nekitvand/to_do_service/internal/server"
 	"github.com/nekitvand/to_do_service/internal/config"
 	todo_service "github.com/nekitvand/to_do_service/internal/service"
+	"github.com/nekitvand/to_do_service/internal/pkg/db"
+	_ "github.com/jackc/pgx/v4"
+	_ "github.com/jackc/pgx/v4/stdlib"
+
 )
 
 func main() {
@@ -40,6 +44,12 @@ func main() {
 		}
 		swagger.ListenAndServe()
 	}()
+
+	conn, err := db.ConnectDB(&cfg.DB)
+	if err != nil {
+		fmt.Println(fmt.Errorf("sql.Open() error | %v,",err))
+	}
+	defer conn.Close()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
