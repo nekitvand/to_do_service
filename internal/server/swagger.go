@@ -11,7 +11,6 @@ import (
 
 func CreateSwaggerServer(cfg *config.Config) (*http.Server, error) {
 
-	// GrcAddr := fmt.Sprintf("%s:%v",cfg.Grpc.Host,cfg.Grpc.Port)
 	SwagAddr := fmt.Sprintf("%s:%v",cfg.Swagger.Host,cfg.Swagger.Port)
 	GatewayAddr := fmt.Sprintf("%s:%v",cfg.Gateway.Host,cfg.Gateway.Port)
 
@@ -33,10 +32,6 @@ func CreateSwaggerServer(cfg *config.Config) (*http.Server, error) {
 			w.WriteHeader(500)
 			return
 		}
-
-		w.Header().Set("Content-type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.WriteHeader(200)
 		w.Write(patchedSwagger)
 	}))
@@ -46,9 +41,6 @@ func CreateSwaggerServer(cfg *config.Config) (*http.Server, error) {
 	serveMux.Handle("/docs/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/docs" || strings.HasPrefix(r.URL.Path, "/docs/") {
 			r.URL.Path = strings.TrimPrefix(r.URL.Path, "/docs")
-			w.Header().Set("Content-type", "application/json")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
-			w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 			docsServer.ServeHTTP(w, r)
 		} else {
 			w.WriteHeader(404)
@@ -57,7 +49,7 @@ func CreateSwaggerServer(cfg *config.Config) (*http.Server, error) {
 
 	gatewayServer := &http.Server{
 		Addr:    SwagAddr,
-		Handler: serveMux,
+		Handler: cors(serveMux),
 	}
 
 	return gatewayServer, nil
