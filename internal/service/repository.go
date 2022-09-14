@@ -33,3 +33,7 @@ func NewRepository() *Repository{
 func (r *Repository)FindAllToDoes(_ context.Context)(ToDos,error){
 	return todoes,nil
 }
+
+func (r *Repository)SelectAllToDo(_ context.Context)([]struct{}){
+	return nil
+}
