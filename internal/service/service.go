@@ -32,3 +32,12 @@ func (s Service) GetToDoById(ctx context.Context, id int32)(*ToDo,error) {
 	}
 	return to,nil
 }
+
+
+func (s Service) GetAllToDo(ctx context.Context)([]*ToDo,error){
+	todo, err := s.repository.FindAllToDoes(ctx)
+	if err != nil {
+		return nil, errors.Wrap(err,"repository.FindAllToDoes")
+	}
+	return todo,err
+}
