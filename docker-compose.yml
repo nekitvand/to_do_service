@@ -1,18 +1,20 @@
-version: "3.3"
+version: "3.9"
 
 services:
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=nikita 
+      - POSTGRES_PASSWORD=qwerty1234
+    ports:
+      - "5432:5432"
+    volumes: 
+      - ./postgres-data:/var/lib/postgresql/data
+
   to_do_service:
     build: .
     ports:
     - 6000:6000
     - 6001:6001
     - 6002:6002
-  postgres:
-    image: postgres
-    environment:
-      - POSTGRES_USER=user 
-      - POSTGRES_PASSWORD=password
-    ports:
-      - '5432:5432'
-    volumes: 
-      - ./postgres-data:/var/lib/postgresql/data

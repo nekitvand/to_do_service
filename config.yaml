@@ -13,7 +13,7 @@ swagger:
   filepath: "swagger/api/to_do_service/to_do_service.swagger.json"
 
 db:
-  DSN: "postgres://user:password@localhost:5432/user"
+  DSN: "postgres://nikita:qwerty1234@localhost:5432/nikita"
   maxOpenConns: 5
   maxIdleConns: 5
   connMaxIdleTime: 5m

@@ -2,42 +2,52 @@ package todo_service
 
 import (
 	"context"
+	"log"
+
 	"github.com/pkg/errors"
 )
 
 type Service struct {
-	repository RepositoryInterface
+	repository IRepository
 }
 
-
-type RepositoryInterface interface {
-	FindAllToDoes(context.Context)(ToDos,error)
+type IRepository interface {
+	FindAllToDoes(context.Context) (ToDos, error)
+	CreateToDo(context.Context, *ToDo) (message string, err error)
 }
 
-func NewService(repository RepositoryInterface) Service {
-	return Service{repository: repository}
+func NewService(repo IRepository) *Service {
+	return &Service{repository: repo}
 }
 
 var ErrNoToDo = errors.New("no todo")
 
-func (s Service) GetToDoById(ctx context.Context, id int32)(*ToDo,error) {
+func (s Service) GetToDoById(ctx context.Context, id int32) (*ToDo, error) {
 	todo, err := s.repository.FindAllToDoes(ctx)
 	if err != nil {
-		return nil, errors.Wrap(err,"repository.FindAllToDoes")
+		return nil, errors.Wrap(err, "repository.FindAllToDoes")
 	}
 
 	to := todo.FilterById(id)
-	if to == nil{
-		return nil,ErrNoToDo
+	if to == nil {
+		return nil, ErrNoToDo
 	}
-	return to,nil
+	return to, nil
 }
 
-
-func (s Service) GetAllToDo(ctx context.Context)([]*ToDo,error){
+func (s Service) GetAllToDo(ctx context.Context) ([]*ToDo, error) {
 	todo, err := s.repository.FindAllToDoes(ctx)
 	if err != nil {
-		return nil, errors.Wrap(err,"repository.FindAllToDoes")
+		return nil, errors.Wrap(err, "repository.FindAllToDoes")
 	}
-	return todo,err
+	return todo, err
+}
+
+func (s Service) CreateToDo(ctx context.Context, id int32, name string, text string) (message string, err error) {
+	todo := &ToDo{Id: id, Name: name, Text: text}
+	str,err := s.repository.CreateToDo(ctx, todo)
+	if err != nil{
+		log.Fatal("Dont added to DB")
+	}
+	return str, nil
 }

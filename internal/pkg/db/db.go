@@ -17,7 +17,6 @@ type Config interface {
 
 func ConnectDB(cfg Config) (*sqlx.DB, error) {
 	db, err := sqlx.Open("pgx", cfg.GetDSN())
-
 	if err != nil {
 		return nil, err
 	}
