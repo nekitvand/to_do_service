@@ -8,34 +8,12 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-var todoes = ToDos{
-	{
-		Id:   1,
-		Name: "new1",
-		Text: "zadvcx",
-	},
-	{
-		Id:   2,
-		Name: "new2",
-		Text: "cadvcx",
-	},
-	{
-		Id:   3,
-		Name: "new3",
-		Text: "badvcx",
-	},
-}
-
 type Repository struct {
 	DB *sqlx.DB
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{DB: db}
-}
-
-func (r *Repository) FindAllToDoes(ctx context.Context) (ToDos, error) {
-	return todoes, nil
 }
 
 func (r *Repository) CreateToDo(ctx context.Context, todo *ToDo) (message string, err error) {
@@ -63,4 +41,17 @@ func (r *Repository) GetAllToDo(ctx context.Context) (todoes []*ToDo, err error)
 		return nil, err
 	}
 	return todos, err
+}
+
+func (r *Repository) GetToDoById(ctx context.Context, id int32)(*ToDo, error){
+	query,args,err := sq.Select("*").PlaceholderFormat(sq.Dollar).From("todo").Where(sq.Eq{"id":id}).ToSql()
+	if err != nil {
+		return nil, err
+	}
+	var todoByid []*ToDo
+	err = r.DB.SelectContext(ctx,&todoByid,query,args...)
+	if err != nil {
+		return nil, err
+	}
+	return todoByid[0], nil
 }

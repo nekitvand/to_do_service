@@ -11,9 +11,9 @@ type Service struct {
 }
 
 type IRepository interface {
-	FindAllToDoes(context.Context) (ToDos, error)
 	CreateToDo(context.Context, *ToDo) (message string, err error)
 	GetAllToDo(context.Context) (todoes []*ToDo, err error)
+	GetToDoById(ctx context.Context, id int32)(todo *ToDo, err error)
 }
 
 func NewService(repo IRepository) *Service {
@@ -23,16 +23,11 @@ func NewService(repo IRepository) *Service {
 var ErrNoToDo = errors.New("no todo")
 
 func (s Service) GetToDoById(ctx context.Context, id int32) (*ToDo, error) {
-	todo, err := s.repository.FindAllToDoes(ctx)
+	todo, err := s.repository.GetToDoById(ctx, id)
 	if err != nil {
-		return nil, errors.Wrap(err, "repository.FindAllToDoes")
+		return nil, errors.Wrap(err, "repository.GetToDoById")
 	}
-
-	to := todo.FilterById(id)
-	if to == nil {
-		return nil, ErrNoToDo
-	}
-	return to, nil
+	return todo, nil
 }
 
 func (s Service) GetAllToDo(ctx context.Context) ([]*ToDo, error) {
@@ -45,9 +40,9 @@ func (s Service) GetAllToDo(ctx context.Context) ([]*ToDo, error) {
 
 func (s Service) CreateToDo(ctx context.Context, id int32, name string, text string) (message string, err error) {
 	todo := &ToDo{Id: id, Name: name, Text: text}
-	str,err := s.repository.CreateToDo(ctx, todo)
-	if err != nil{
-		return "dont add to DB",err
+	str, err := s.repository.CreateToDo(ctx, todo)
+	if err != nil {
+		return "dont add to DB", err
 	}
 	return str, nil
 }
