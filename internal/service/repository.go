@@ -58,3 +58,12 @@ func (r *Repository) GetToDoById(ctx context.Context, id int32)(*ToDo, error){
 	}
 	return &todoByID, nil
 }
+
+func (r *Repository)DeleteToDo(ctx context.Context,id int32)(message string,err error){
+	query := sq.Delete("todo").Where(sq.Eq{"id":id}).PlaceholderFormat(sq.Dollar).RunWith(r.DB)
+	_, err = query.ExecContext(ctx)
+	if err != nil{
+		return fmt.Sprintf("dont delete todo with id: %v",id),err
+	}
+	return fmt.Sprintf("delete todo with id: %v",id),nil
+}

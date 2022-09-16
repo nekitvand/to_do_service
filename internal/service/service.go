@@ -2,6 +2,7 @@ package todo_service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pkg/errors"
 )
@@ -14,6 +15,7 @@ type IRepository interface {
 	CreateToDo(context.Context, *ToDo) (message string, err error)
 	GetAllToDo(context.Context) (todoes []*ToDo, err error)
 	GetToDoById(ctx context.Context, id int32)(todo *ToDo, err error)
+	DeleteToDo(ctx context.Context,id int32)(string,error)
 }
 
 func NewService(repo IRepository) *Service {
@@ -43,6 +45,14 @@ func (s Service) CreateToDo(ctx context.Context, id int32, name string, text str
 	str, err := s.repository.CreateToDo(ctx, todo)
 	if err != nil {
 		return "dont add to DB", err
+	}
+	return str, nil
+}
+
+func (s Service) DeleteToDo(ctx context.Context, id int32) (message string, err error) {
+	str, err := s.repository.DeleteToDo(ctx, id)
+	if err != nil {
+		return fmt.Sprintf("dont delete todo with id: %v",id), err
 	}
 	return str, nil
 }
