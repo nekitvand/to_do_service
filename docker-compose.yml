@@ -14,7 +14,12 @@ services:
 
   to_do_service:
     build: .
+    environment:
+     - DOCK=enable
     ports:
     - 6000:6000
     - 6001:6001
     - 6002:6002
+    depends_on:
+      - db
+  

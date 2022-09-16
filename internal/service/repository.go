@@ -3,7 +3,6 @@ package todo_service
 import (
 	"context"
 	"fmt"
-	"log"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -40,11 +39,12 @@ func (r *Repository) FindAllToDoes(ctx context.Context) (ToDos, error) {
 }
 
 func (r *Repository) CreateToDo(ctx context.Context, todo *ToDo) (message string,err error) {
-	query := sq.Insert("todo").PlaceholderFormat(sq.Dollar).Columns("id","name","text").Values(todo.Id,todo.Name,todo.Text).RunWith(r.DB)
+	query := sq.Insert("todo").PlaceholderFormat(sq.Dollar).Columns("id","title","text").Values(todo.Id,todo.Name,todo.Text).RunWith(r.DB)
 
 	_,err = query.ExecContext(ctx)
 	if err != nil{
-		log.Fatal(err)
+		fmt.Println(err)
+		return "dont added", err
 	}
 	return fmt.Sprint("added todo with id", todo.Id),nil
 	

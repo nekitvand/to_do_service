@@ -14,6 +14,7 @@ swagger:
 
 db:
   DSN: "postgres://nikita:qwerty1234@localhost:5432/nikita"
+  DSND: "postgres://nikita:qwerty1234@db:5432/nikita"
   maxOpenConns: 5
   maxIdleConns: 5
   connMaxIdleTime: 5m
