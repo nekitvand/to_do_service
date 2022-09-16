@@ -13,6 +13,7 @@ type Service struct {
 type IRepository interface {
 	FindAllToDoes(context.Context) (ToDos, error)
 	CreateToDo(context.Context, *ToDo) (message string, err error)
+	GetAllToDo(context.Context) (todoes []*ToDo, err error)
 }
 
 func NewService(repo IRepository) *Service {
@@ -35,9 +36,9 @@ func (s Service) GetToDoById(ctx context.Context, id int32) (*ToDo, error) {
 }
 
 func (s Service) GetAllToDo(ctx context.Context) ([]*ToDo, error) {
-	todo, err := s.repository.FindAllToDoes(ctx)
+	todo, err := s.repository.GetAllToDo(ctx)
 	if err != nil {
-		return nil, errors.Wrap(err, "repository.FindAllToDoes")
+		return nil, errors.Wrap(err, "repository.GetAllToDo")
 	}
 	return todo, err
 }
