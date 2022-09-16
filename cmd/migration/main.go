@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/nekitvand/to_do_service/internal/config"
 	"github.com/nekitvand/to_do_service/internal/pkg/db"
 	"github.com/nekitvand/to_do_service/migrations"
@@ -12,7 +11,7 @@ import (
 )
 
 func main() {
-	if err := config.ReadConfigYaml("../../config.yaml"); err != nil {
+	if err := config.ReadConfigYaml("config.yaml"); err != nil {
 		fmt.Println(err)
 	}
 	cfg := config.GetConfig()

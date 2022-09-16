@@ -2,7 +2,6 @@ package todo_service
 
 import (
 	"context"
-	"log"
 
 	"github.com/pkg/errors"
 )
@@ -47,7 +46,7 @@ func (s Service) CreateToDo(ctx context.Context, id int32, name string, text str
 	todo := &ToDo{Id: id, Name: name, Text: text}
 	str,err := s.repository.CreateToDo(ctx, todo)
 	if err != nil{
-		log.Fatal("Dont added to DB")
+		return "dont add to DB",err
 	}
 	return str, nil
 }

@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"time"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -49,6 +50,7 @@ type Config struct {
 
 type DB struct {
 	DSN        string `yaml:"DSN"`
+	DSND		string `yaml:"DSND"`
 	MaxOpenConns int `yaml:"maxOpenConns"`
 	MaxIdleConns int `yaml:"MaxIdleConns"`
 	ConnMaxIdleTime time.Duration `yaml:"connMaxIdleTime"`
@@ -56,6 +58,10 @@ type DB struct {
 }
 
 func (db *DB) GetDSN() string {
+	x := os.Getenv("DOCK")
+	if x != ""{
+		return db.DSND
+	}
 	return db.DSN
 }
 
