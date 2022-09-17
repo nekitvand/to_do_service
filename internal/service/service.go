@@ -16,6 +16,7 @@ type IRepository interface {
 	GetAllToDo(context.Context) (todoes []*ToDo, err error)
 	GetToDoById(ctx context.Context, id int32)(todo *ToDo, err error)
 	DeleteToDo(ctx context.Context,id int32)(string,error)
+	UpdateFieldToDo(ctx context.Context, field string, value string,id int32)(string,error)
 }
 
 func NewService(repo IRepository) *Service {
@@ -55,4 +56,14 @@ func (s Service) DeleteToDo(ctx context.Context, id int32) (message string, err 
 		return fmt.Sprintf("dont delete todo with id: %v",id), err
 	}
 	return str, nil
+}
+
+
+func (s Service)UpdateFieldToDo(ctx context.Context, field string, value string,id int32)(message string,err error){
+	str,err := s.repository.UpdateFieldToDo(ctx,field,value,id)
+	if err != nil {
+		return fmt.Sprintf("dont update field: %s in todo with id: %v",field,id),err
+	}
+	return str, nil
+
 }
