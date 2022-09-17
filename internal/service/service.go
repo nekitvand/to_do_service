@@ -41,7 +41,7 @@ func (s Service) GetAllToDo(ctx context.Context) ([]*ToDo, error) {
 }
 
 func (s Service) CreateToDo(ctx context.Context, id int32, name string, text string) (message string, err error) {
-	todo := &ToDo{Id: id, Name: name, Text: text}
+	todo := &ToDo{Id: id, Title: name, Text: text}
 	str, err := s.repository.CreateToDo(ctx, todo)
 	if err != nil {
 		return "dont add to DB", err

@@ -17,7 +17,7 @@ func (i *Implementation) GetToDoById(ctx context.Context, req *pb.GetToDoByIdReq
 	}
 	pbToDo := &pb.ToDo{
 				Id:   t.Id,
-				Name: t.Name,
+				Title: t.Title,
 				Text: t.Text,
 			}
 

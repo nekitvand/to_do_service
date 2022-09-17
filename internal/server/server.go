@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net"
 
-	// "net/http"
-
 	api "github.com/nekitvand/to_do_service/internal/app/to_do_service"
 	"github.com/nekitvand/to_do_service/internal/config"
 	todo_service "github.com/nekitvand/to_do_service/internal/service"

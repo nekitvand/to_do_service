@@ -17,7 +17,7 @@ service ToDoService {
 
     rpc GetAllToDo (GetAllToDoRequest) returns (GetAllToDoResponse) {
         option (google.api.http) = {
-            post: "/v1/get_all"
+            get: "/v1/get_all"
         };
     }
 
@@ -46,7 +46,7 @@ service ToDoService {
 
     rpc DeleteToDo (DeleteToDoRequest) returns (DeleteToDoResponse) {
         option (google.api.http) = {
-            delete: "/v1/update/{id}"
+            delete: "/v1/delete/{id}"
 
         };
     }
@@ -56,7 +56,7 @@ service ToDoService {
 
 message ToDo{
     int32 id = 1;
-    string name = 2;
+    string title = 2;
     string text = 3;
 }
 
@@ -78,8 +78,10 @@ message GetAllToDoResponse{
 
 message UpdateFieldToDoRequest{
     int32 id = 1;
-	string title = 2;
-	string text = 3;
+	oneof todo_oneof{
+        string title = 2;
+	    string text = 3;
+    }
 }
 
 message UpdateFieldToDoResponse {

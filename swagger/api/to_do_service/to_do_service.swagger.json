@@ -48,8 +48,39 @@
         ]
       }
     },
+    "/v1/delete/{id}": {
+      "delete": {
+        "operationId": "ToDoService_DeleteToDo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteToDoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "ToDoService"
+        ]
+      }
+    },
     "/v1/get_all": {
-      "post": {
+      "get": {
         "operationId": "ToDoService_GetAllToDo",
         "responses": {
           "200": {
@@ -102,35 +133,6 @@
       }
     },
     "/v1/update/{id}": {
-      "delete": {
-        "operationId": "ToDoService_DeleteToDo",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1DeleteToDoResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "tags": [
-          "ToDoService"
-        ]
-      },
       "patch": {
         "operationId": "ToDoService_UpdateToDo",
         "responses": {
@@ -303,7 +305,7 @@
           "type": "integer",
           "format": "int32"
         },
-        "name": {
+        "title": {
           "type": "string"
         },
         "text": {

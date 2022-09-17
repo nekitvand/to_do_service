@@ -14,7 +14,7 @@ func (i *Implementation) GetAllToDo(ctx context.Context, req *pb.GetAllToDoReque
 	if err != nil {
 		return nil, errors.Wrap(err,"todoService.GetToDoById")}
 	for idx,value := range t{
-		todoes[idx] = &pb.ToDo{Id: value.Id,Name: value.Name,Text: value.Text}
+		todoes[idx] = &pb.ToDo{Id: value.Id,Title: value.Title,Text: value.Text}
 	}
 	return &pb.GetAllToDoResponse{Todo:todoes},err
 }

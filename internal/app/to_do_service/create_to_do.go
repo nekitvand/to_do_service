@@ -9,7 +9,7 @@ import (
 
 func (i *Implementation) CreateToDo(ctx context.Context, req *pb.CreateToDoRequest) (*pb.CreateToDoResponse, error) {
 	todo := req.GetToDo()
-	result, err := i.todoService.CreateToDo(ctx, todo.GetId(),todo.GetName(),todo.GetText())
+	result, err := i.todoService.CreateToDo(ctx, todo.GetId(),todo.GetTitle(),todo.GetText())
 	if err != nil{
 		return &pb.CreateToDoResponse{Message: err.Error()}, err
 	}
