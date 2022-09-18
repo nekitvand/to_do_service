@@ -76,3 +76,16 @@ func (r *Repository)UpdateFieldToDo(ctx context.Context,field string, value stri
 	}
 	return fmt.Sprintf("update todo with id: %v",id),nil
 }
+
+func (r *Repository)UpdateToDo(ctx context.Context,id int32,title string,text string)(message string,err error){
+	query,args,_ := sq.Update("todo").Set("title",title).Set("text",text).Where(sq.Eq{"id":id}).PlaceholderFormat(sq.Dollar).Suffix("RETURNING id").ToSql()
+	var str string
+	rows,err := r.DB.QueryxContext(ctx,query,args...)
+	for rows.Next(){
+		rows.Scan(&str)
+	}
+	if err != nil{
+		return "",err
+	}
+	return str, nil
+}

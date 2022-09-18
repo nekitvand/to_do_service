@@ -3,7 +3,6 @@ package todo_service
 import (
 	"context"
 	"fmt"
-
 	"github.com/pkg/errors"
 )
 
@@ -17,6 +16,7 @@ type IRepository interface {
 	GetToDoById(ctx context.Context, id int32)(todo *ToDo, err error)
 	DeleteToDo(ctx context.Context,id int32)(string,error)
 	UpdateFieldToDo(ctx context.Context, field string, value string,id int32)(string,error)
+	UpdateToDo(ctx context.Context,id int32,title string,text string)(message string,err error)
 }
 
 func NewService(repo IRepository) *Service {
@@ -66,4 +66,12 @@ func (s Service)UpdateFieldToDo(ctx context.Context, field string, value string,
 	}
 	return str, nil
 
+}
+
+func (s Service)UpdateToDo(ctx context.Context,id int32,title string,text string)(message string,err error){
+	str,err := s.repository.UpdateToDo(ctx,id,title,text)
+	if err != nil{
+		return fmt.Sprintf("dont update todo with id: %v",str),err
+	}
+	return fmt.Sprintf("update todo with id: %v",str),nil
 }
