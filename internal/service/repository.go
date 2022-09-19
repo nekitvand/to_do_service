@@ -17,14 +17,15 @@ func NewRepository(db *sqlx.DB) *Repository {
 }
 
 func (r *Repository) CreateToDo(ctx context.Context, todo *ToDo) (message string, err error) {
-	query := sq.Insert("todo").PlaceholderFormat(sq.Dollar).Columns("id", "title", "text").Values(todo.Id, todo.Title, todo.Text).RunWith(r.DB)
-
-	_, err = query.ExecContext(ctx)
-	if err != nil {
-		fmt.Println(err)
-		return "dont added", err
+	query := sq.Insert("todo").PlaceholderFormat(sq.Dollar).Columns("id", "title", "text").Values(todo.Id, todo.Title, todo.Text).Suffix("RETURNING id").RunWith(r.DB)
+	rows, err := query.QueryContext(ctx)
+	for rows.Next(){
+		rows.Scan(&message)
 	}
-	return fmt.Sprint("added todo with id: ", todo.Id), nil
+	if err != nil {
+		return "",err
+	}
+	return message, nil
 
 }
 
@@ -35,12 +36,11 @@ func (r *Repository) GetAllToDo(ctx context.Context) (todoes []*ToDo, err error)
 	if err != nil {
 		return nil, err
 	}
-	var todos []*ToDo
-	err = r.DB.SelectContext(ctx, &todos, s, args...)
+	err = r.DB.SelectContext(ctx, &todoes, s, args...)
 	if err != nil {
 		return nil, err
 	}
-	return todos, err
+	return todoes, err
 }
 
 func (r *Repository) GetToDoById(ctx context.Context, id int32)(*ToDo, error){
@@ -60,32 +60,40 @@ func (r *Repository) GetToDoById(ctx context.Context, id int32)(*ToDo, error){
 }
 
 func (r *Repository)DeleteToDo(ctx context.Context,id int32)(message string,err error){
-	query := sq.Delete("todo").Where(sq.Eq{"id":id}).PlaceholderFormat(sq.Dollar).RunWith(r.DB)
-	_, err = query.ExecContext(ctx)
-	if err != nil{
-		return fmt.Sprintf("dont delete todo with id: %v",id),err
+	query := sq.Delete("todo").Where(sq.Eq{"id":id}).PlaceholderFormat(sq.Dollar).Suffix("RETURNING id").RunWith(r.DB)
+	rows, err := query.QueryContext(ctx)
+	for rows.Next(){
+		rows.Scan(&message)
 	}
-	return fmt.Sprintf("delete todo with id: %v",id),nil
+
+	if err != nil{
+		return "",err
+	}
+	return message,nil
 }
 
-func (r *Repository)UpdateFieldToDo(ctx context.Context,field string, value string,id int32)(message string,err error){
-	query := sq.Update("todo").Set(field,value).Where(sq.Eq{"id":id}).PlaceholderFormat(sq.Dollar).RunWith(r.DB)
-	_, err = query.ExecContext(ctx)
-	if err != nil{
-		return fmt.Sprintf("dont update field: %s in todo with id: %v",field,id),err
+func (r *Repository)UpdateFieldToDo(ctx context.Context,field string, value string,id int32)(message map[string]interface{},err error){
+	query,args,_ := sq.Update("todo").Set(field,value).Where(sq.Eq{"id":id}).PlaceholderFormat(sq.Dollar).Suffix(fmt.Sprintf("RETURNING id,%v",field)).ToSql()
+	rows,_  := r.DB.QueryxContext(ctx,query,args...)
+	results := make(map[string]interface{})
+	for rows.Next(){
+		err := rows.MapScan(results)
+		fmt.Println(results)
+		if err != nil{
+			return nil,err
+		}
 	}
-	return fmt.Sprintf("update todo with id: %v",id),nil
+	return results,nil
 }
 
 func (r *Repository)UpdateToDo(ctx context.Context,id int32,title string,text string)(message string,err error){
 	query,args,_ := sq.Update("todo").Set("title",title).Set("text",text).Where(sq.Eq{"id":id}).PlaceholderFormat(sq.Dollar).Suffix("RETURNING id").ToSql()
-	var str string
 	rows,err := r.DB.QueryxContext(ctx,query,args...)
 	for rows.Next(){
-		rows.Scan(&str)
+		rows.Scan(&message)
 	}
 	if err != nil{
 		return "",err
 	}
-	return str, nil
+	return message, nil
 }
